@@ -6,27 +6,32 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import * as xml2js from 'xml2js';
 
+//import {dto} from '.'
+
 @Component({
   selector: 'app-news',
   templateUrl: './news.component.html',
   styleUrls: ['./news.component.css']
 })
 export class NewsComponent implements OnInit {
-  RssData: NewsRss;
+  RssData: NewsRss | undefined;
+
   constructor(private http: HttpClient,private route: ActivatedRoute) {}
+
   ngOnInit(): void {
     this.route.queryParamMap.subscribe((params: any) => {
       var symbol = params.params.q ?? 'AAPL';
     this.GetRssFeedData(symbol);
    });
   }
-  GetRssFeedData(symbol) {
+
+  GetRssFeedData(symbol:any) {
     const requestOptions: Object = {
       observe: 'body',
       responseType: 'text'
-    }; 
-    const _url = "https://gadgets.ndtv.com/rss/feeds";
-    this.http 
+    };
+    const _url = "https://www.lemonde.fr/rss/en_continu.xml";
+    this.http
       .get<any>(
         _url,
         requestOptions
@@ -38,7 +43,8 @@ export class NewsComponent implements OnInit {
         });
       });
   }
-   getDataDiff(endDate) {
+
+   getDataDiff(endDate:any) {
     let setDate= new Date(endDate).toISOString();
     var diff = (new Date()).getTime() - new Date(setDate).getTime();
     var days = Math.floor(diff / (60 * 60 * 24 * 1000));
